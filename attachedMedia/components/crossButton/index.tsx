@@ -6,6 +6,8 @@ type Props = {
     onClick: () => void;
 };
 
+// shared (common) component for all of attachment types
+// call the remove attachment function by click
 const CrossButton: React.FC<Props> = props => {
     const { onClick } = props;
     const theme = useTheme();

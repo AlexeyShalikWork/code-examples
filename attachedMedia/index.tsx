@@ -13,11 +13,13 @@ type Props = {
     onRemoveAttachment: onRemoveType;
 };
 
+// render attachment by type
 const renderAttachment = (attachment: any, onRemoveAttachment: onRemoveType) => {
     if (!attachment) return null;
 
     const { type } = attachment;
 
+    // set the remove attachment method
     const onRemove = () => onRemoveAttachment(attachment.id);
 
     switch (type) {
@@ -34,10 +36,13 @@ const renderAttachment = (attachment: any, onRemoveAttachment: onRemoveType) => 
 
 const AttachedMedia: React.FC<Props> = props => {
     const { attachments, onRemoveAttachment } = props;
+    // the variable for converted attachments
     const [convertedAttachments, setConvertedAttachments] = useState<any[]>([]);
 
     useEffect(() => {
+        // convert attachments
         Promise.all(attachments.map(attachment => convertAttachment(attachment))).then(convertedAttachments => {
+            // set attachments to state
             setConvertedAttachments(convertedAttachments);
         });
     }, [attachments]);

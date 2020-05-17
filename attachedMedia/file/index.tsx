@@ -13,6 +13,7 @@ type Props = {
     onRemove: () => void;
 };
 
+// render the component with the file data
 const File: React.FC<Props> = props => {
     const { file, onRemove } = props;
 

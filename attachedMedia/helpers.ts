@@ -9,6 +9,7 @@ export const convertAttachment = (attachment: File): Promise<any> => {
 
     const { type } = attachment;
 
+    // check the type of attachment and call a desired handler
     switch (true) {
         case /image/.test(type):
             return convertAttachmentToImage(attachment);
@@ -23,37 +24,43 @@ export const convertAttachment = (attachment: File): Promise<any> => {
     }
 };
 
+// Convert attachment (File from input[type=file]) to format for the image component
 const convertAttachmentToImage = (attachment: File) => {
     return new Promise(resolve => {
+        // create the file reader
         const fr = new FileReader();
+        // the file uploaded callback
         fr.onload = () => {
             resolve({
                 id: attachment.id,
                 type: ATTACHMENT_TYPE.image,
-                result: fr.result,
+                result: fr.result, // contain file data in the form of data: URL
             });
         };
+        // read the file
         fr.readAsDataURL(attachment);
     });
 };
 
+// Convert attachment (File from input[type=file]) to format for the file component
 const convertAttachmentToFile = (attachment: File) => {
     return Promise.resolve({
         id: attachment.id,
         type: ATTACHMENT_TYPE.file,
         name: attachment.name,
-        size: getMegabytesWithTranslations(attachment.size),
+        size: getMegabytesWithTranslations(attachment.size), // is a size of file (MB)
     });
 };
 
+// Convert attachment (File from input[type=file]) to format for the video component
 const convertAttachmentToVideo = (attachment: File) => {
     return new Promise(resolve => {
-        const result = URL.createObjectURL(attachment);
+        const result = URL.createObjectURL(attachment); // the data for video html tag
         const video = document.createElement('video');
         video.preload = 'metadata';
         video.onloadedmetadata = () => {
             URL.revokeObjectURL(result);
-            const duration = getMinutesSecondsTime(video.duration);
+            const duration = getMinutesSecondsTime(video.duration); // duration of video
             resolve({
                 id: attachment.id,
                 type: ATTACHMENT_TYPE.video,

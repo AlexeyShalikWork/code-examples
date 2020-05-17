@@ -15,26 +15,31 @@ export interface IRefresh {
     timeout: number;
 }
 
+// Refresh is the service for subscribe to auto-refresh and control the process
+// auto-refresh is the periodic server polling (the server sets the interval)
 export class Refresh implements IRefresh {
-    requestHeaders = {} as IRequestHeaders;
-    refreshTime: number = 0;
-    timeout: number = 0;
-    callback: any;
-    callbackIsFetching: boolean = false;
-    freezeUpdating: boolean = false;
-    promise: any;
+    requestHeaders = {} as IRequestHeaders; // request headers
+    refreshTime: number = 0; // time of the interval
+    timeout: number = 0; // the timeout object
+    callback: any; // the function of the request to the server
+    callbackIsFetching: boolean = false; // variable for the loading state
+    freezeUpdating: boolean = false; // the variable for freeze polling
 
+    // subscribe
     async subscribeToAutoRefresh(callback: any, clearFirst: boolean = false) {
         if (clearFirst) {
             this.unsubscribeFromAutoRefresh();
         }
 
+        // wait until last fetch will complete
         await this.waitFetchingComplete();
 
         this.freezeUpdating = false;
         this.callback = callback;
 
         const response: any = await new Promise((resolve) => {
+
+            // run request to server through the refresh time
             this.timeout = window.setTimeout(async () => {
                 if (!this.freezeUpdating) {
                     this.callbackIsFetching = true;
@@ -45,6 +50,7 @@ export class Refresh implements IRefresh {
             }, this.refreshTime);
         });
 
+        // check if continue
         if (!this.freezeUpdating) {
             if (response && response.headers) {
                 this.handleResponseHeaders(response.headers);
@@ -57,7 +63,9 @@ export class Refresh implements IRefresh {
         return Promise.resolve(response);
     }
 
+    // unsubscribe
     unsubscribeFromAutoRefresh(clearHeaders: boolean = true) {
+        // clear the all of variables
         if (clearHeaders) {
             this.requestHeaders = {} as IRequestHeaders;
         }
@@ -66,6 +74,7 @@ export class Refresh implements IRefresh {
         this.freezeUpdating = true;
     }
 
+    // wait until last fetch will complete
     async waitFetchingComplete() {
         if (this.callbackIsFetching) {
             await new Promise((resolve) => {
@@ -81,6 +90,7 @@ export class Refresh implements IRefresh {
         return Promise.resolve();
     }
 
+    // stop the auto refresh and run again
     async handleRefreshManually() {
         this.unsubscribeFromAutoRefresh();
         await this.waitFetchingComplete();
@@ -92,14 +102,18 @@ export class Refresh implements IRefresh {
         }
     }
 
+    // make the request without the auto refresh
     async handleParallelRequest(callback?: any, clearHeaders: boolean = true) {
+        // stop the auto refresh
         this.unsubscribeFromAutoRefresh(clearHeaders);
         await this.waitFetchingComplete();
 
+        // make the request to the server
         if (callback) {
             await callback();
         }
 
+        // run again the auto refresh
         if (this.callback) {
             return Promise.resolve(this.subscribeToAutoRefresh(this.callback));
         } else {
@@ -107,6 +121,7 @@ export class Refresh implements IRefresh {
         }
     }
 
+    // handle headers
     handleResponseHeaders(responseHeaders: IResponseHeaders) {
         const lastModified = responseHeaders['last-modified'];
         const etag = responseHeaders.etag;
@@ -122,6 +137,7 @@ export class Refresh implements IRefresh {
 
         if (cacheControl && cacheControl.indexOf('max-age') !== -1) {
             const maxAge = Number(cacheControl.substr(cacheControl.lastIndexOf('=') + 1)) * 1000;
+            // set the refreshTime from the server
             this.refreshTime = (this.refreshTime !== maxAge) ? maxAge : this.refreshTime;
         }
     }

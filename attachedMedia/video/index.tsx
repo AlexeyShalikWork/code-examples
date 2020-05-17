@@ -12,6 +12,7 @@ type Props = {
     onRemove: () => void;
 };
 
+// render the component with the video data
 const Video: React.FC<Props> = props => {
     const { video, onRemove } = props;
 

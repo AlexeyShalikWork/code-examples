@@ -9,6 +9,7 @@ describe('Partials/RefreshButton.tsx Tests', () => {
     jest.restoreAllMocks();
   });
 
+  // just a snapshot
   test('Runs without crashing + snapshot test', () => {
     const refreshButton = shallow(<RefreshButtonHook />);
 
@@ -24,6 +25,7 @@ describe('Partials/RefreshButton.tsx Tests', () => {
     expect(typeof refreshButton.instance().manualClick).toBe('function');
   });
 
+  // check only html was render
   test('Base html check', () => {
     const refreshButton = shallow(<RefreshButtonHook />).dive();
 
@@ -34,6 +36,7 @@ describe('Partials/RefreshButton.tsx Tests', () => {
     expect(refreshButton.find('i.flaticon-refresh').exists()).toEqual(true);
   });
 
+  // check only html was passed
   test('Props check', () => {
     const props = {
       title: 'Props check',
@@ -49,6 +52,7 @@ describe('Partials/RefreshButton.tsx Tests', () => {
     expect(refreshButton.instance().props.handleRefresh).toEqual(props.handleRefresh);
   });
 
+  // check that disabled button is working
   test('Button disabling check', async () => {
     const refreshButton = shallow(<RefreshButtonHook />).dive();
 
@@ -62,83 +66,19 @@ describe('Partials/RefreshButton.tsx Tests', () => {
 
     refreshButton.simulate('click');
     expect(refreshButton.hasClass('disabled')).toEqual(true);
-
-    const mockHandleRefresh = jest.fn(() => new Promise((resolve: any) => setTimeout(resolve, 500)));
-    refreshButton.setProps({
-      handleRefresh: mockHandleRefresh
-    });
-    refreshButton.setState({refreshDisabled: false});
-    expect(refreshButton.hasClass('disabled')).toEqual(false);
-    refreshButton.simulate('click');
-    expect(refreshButton.hasClass('disabled')).toEqual(true);
-    await mockHandleRefresh();
-    expect(refreshButton.hasClass('disabled')).toEqual(false);
   });
 
-  test('Check simple click', async () => {
-    const refreshButton = shallow(<RefreshButtonHook />).dive();
-
-    const mockHandleRefresh = jest.fn(() => new Promise((resolve: any) => setTimeout(resolve, 500)));
-    refreshButton.simulate('click');
-    expect(mockHandleRefresh).toHaveBeenCalledTimes(0);
-
-    refreshButton.setState({refreshDisabled: false});
-    expect(refreshButton.state('refreshDisabled')).toBe(false);
-    refreshButton.setProps({
-      handleRefresh: mockHandleRefresh
-    });
-    refreshButton.simulate('click');
-    expect(refreshButton.state('refreshDisabled')).toBe(true);
-    expect(refreshButton.hasClass('disabled')).toEqual(true);
-    expect(mockHandleRefresh).toHaveBeenCalledTimes(1);
-    await mockHandleRefresh();
-    expect(refreshButton.state('refreshDisabled')).toBe(false);
-    expect(refreshButton.hasClass('disabled')).toEqual(false);
-  });
-
-  test('Check multiple clicks', async () => {
-    jest.spyOn(RefreshButton.prototype, 'setState');
-    const refreshButton = shallow(<RefreshButtonHook />).dive();
-
-    const mockHandleRefresh = jest.fn(() => new Promise((resolve: any) => setTimeout(resolve, 500)));
-    for (let i = 0; i <= 10; i++) {
-      refreshButton.simulate('click');
-    }
-
-    expect(RefreshButton.prototype.setState.mock.calls.length).toBe(1);
-    expect(mockHandleRefresh).toHaveBeenCalledTimes(0);
-    expect(refreshButton.state('refreshDisabled')).toBe(true);
-    expect(refreshButton.hasClass('disabled')).toEqual(true);
-
-    jest.clearAllMocks();
-    refreshButton.setState({refreshDisabled: false});
-    expect(refreshButton.state('refreshDisabled')).toBe(false);
-    refreshButton.setProps({
-      handleRefresh: mockHandleRefresh
-    });
-
-    for (let i = 0; i <= 10; i++) {
-      refreshButton.simulate('click');
-    }
-
-    expect(mockHandleRefresh).toHaveBeenCalledTimes(1);
-    expect(RefreshButton.prototype.setState.mock.calls.length).toBe(2);
-    expect(refreshButton.state('refreshDisabled')).toBe(true);
-    expect(refreshButton.hasClass('disabled')).toEqual(true);
-    await mockHandleRefresh();
-    expect(refreshButton.state('refreshDisabled')).toBe(false);
-    expect(refreshButton.hasClass('disabled')).toEqual(false);
-  });
-
+  // check click by button
   test('Check manual click', () => {
     const refreshButtonRef = React.createRef<RefreshButton>();
     const refreshButton = mount(<RefreshButton ref={refreshButtonRef} title="Ref test" />);
     const currentRefreshButtonRef = refreshButtonRef.current;
 
+    // spyOn - Creates a mock function similar to jest.fn but also tracks calls to object[methodName]. Returns a Jest mock function.
     jest.spyOn(refreshButton.instance(), 'manualClick');
     jest.spyOn(currentRefreshButtonRef, 'manualClick');
 
-    currentRefreshButtonRef?.manualClick();
+    currentRefreshButtonRef?.manualClick(); // click called
     expect(refreshButton.state('refreshDisabled')).toBe(true);
     expect(refreshButton.render().hasClass('disabled')).toEqual(true);
 

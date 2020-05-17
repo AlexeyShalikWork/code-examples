@@ -11,11 +11,13 @@ interface IRefreshButtonState {
     refreshDisabled: boolean;
 }
 
+// shared (common) component for request any data of something
 export class RefreshButton extends Component<IRefreshButtonProps, IRefreshButtonState> {
     readonly state: IRefreshButtonState = {
-        refreshDisabled: false
+        refreshDisabled: false // the variable for a disabled of the button until response don't come
     };
 
+    // refresh data
     manualClick = () => {
         const {handleRefresh} = this.props;
         const {refreshDisabled} = this.state;
