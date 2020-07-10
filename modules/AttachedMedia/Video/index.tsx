@@ -1,6 +1,6 @@
 import React from 'react';
 import { ATTACHMENT_TYPE } from '../constants';
-import CrossButton from '../components/crossButton';
+import CrossButton from '../components/CrossButton';
 import { Container, Media, Duration, Play } from './view';
 
 type Props = {

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { convertAttachment } from './helpers';
 import { ATTACHMENT_TYPE } from './constants';
 import { Wrapper } from './view';
-import Image from './image';
-import Video from './video';
-import FileComponent from './file';
+import Image from './Image';
+import Video from './Video';
+import FileComponent from './File';
 
 type onRemoveType = (id: number) => void;
 

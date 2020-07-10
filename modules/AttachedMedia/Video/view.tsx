@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 import { Icon } from 'react-ui-kit';
-import { Cross } from '../components/crossButton/view';
+import { Cross } from '../components/CrossButton/view';
 
 export const Container = styled.div`
     position: relative;

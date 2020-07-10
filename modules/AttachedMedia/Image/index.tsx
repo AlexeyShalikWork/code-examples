@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { TStore, useStore } from 'store';
 import { Container, Media } from './view';
 import { ATTACHMENT_TYPE } from '../constants';
-import CrossButton from '../components/crossButton';
+import CrossButton from '../components/CrossButton';
 
 type Props = {
     image: {

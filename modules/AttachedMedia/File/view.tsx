@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 import Typography from 'react-synesis-ui-kit/core/Typography';
-import { Cross } from '../components/crossButton/view';
+import { Cross } from '../components/CrossButton/view';
 
 export const Container = styled.div`
     position: relative;

@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro';
-import { Cross } from '../components/crossButton/view';
+import { Cross } from '../components/CrossButton/view';
 
 export const Container = styled.div`
     position: relative;

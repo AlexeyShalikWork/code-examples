@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'react-ui-kit';
 import { Container, FileIcon, FileInfo, FileName, FileSize } from './view';
 import { ATTACHMENT_TYPE } from '../constants';
-import CrossButton from '../components/crossButton';
+import CrossButton from '../components/CrossButton';
 
 type Props = {
     file: {

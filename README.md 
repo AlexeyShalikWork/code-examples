@@ -1,10 +1,27 @@
 Сode examples
 
-These are 3 different pieces of code from last projects (I wrote these pieces of code)
-You can look a different styles
+These are different pieces of code from last projects (I wrote these pieces of code)
+You can look a different styles of written code. I used TypeScript, StyleComponents and simple classes-styles
 
+Components:
+Alert, Modal, RefreshButton, SplashScreen - written in a OOP style
+
+Modules:
 AttachedMedia - written in a functional style
 
-utils/Refresh - written in a OOP style
+Services:
+Refresh - is service for auto refresh
 
-components/RefreshButton - covered in tests
+Utils/helpers:
+device, translations - are simple utils
+
+Styles:
+SplashScreen.scss - is simple styles
+modules/AttachedMedia/components/CrossButton/view.tsx,
+modules/AttachedMedia/File/view.tsx,
+modules/AttachedMedia/Image/view.tsx,
+modules/AttachedMedia/Video/view.tsx,
+modules/AttachedMedia/view.tsx - are style components
+
+Test:
+RefreshButton - covered in unit tests
